@@ -1,14 +1,39 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { attendance, balance, type Club, lapsed, newClub, parseAmount, toggleAttendee } from "./club.ts";
+import {
+  attendance,
+  balance,
+  type Club,
+  lapsed,
+  newClub,
+  parseAmount,
+  toggleAttendee,
+} from "./club.ts";
 
-const member = (id: string, joined = "2026-01-01") => ({ id, name: id, contact: "", joined, active: true });
-const session = (id: string, date: string, attendees: string[], fee = 500) => ({ id, date, title: "Training", fee, attendees });
+const member = (id: string, joined = "2026-01-01") => ({
+  id,
+  name: id,
+  contact: "",
+  joined,
+  active: true,
+});
+const session = (id: string, date: string, attendees: string[], fee = 500) => ({
+  id,
+  date,
+  title: "Training",
+  fee,
+  attendees,
+});
 
 const club: Club = {
   ...newClub("Runners", 500),
   members: [member("a"), member("b"), member("c", "2026-03-01")],
-  sessions: [session("1", "2026-02-01", ["a", "b"]), session("2", "2026-03-01", ["a", "c"]), session("3", "2026-03-08", ["a"]), session("4", "2026-03-15", ["a"], 0)],
+  sessions: [
+    session("1", "2026-02-01", ["a", "b"]),
+    session("2", "2026-03-01", ["a", "c"]),
+    session("3", "2026-03-08", ["a"]),
+    session("4", "2026-03-15", ["a"], 0),
+  ],
   payments: [{ id: "p", memberId: "a", amount: 1000, date: "2026-03-01", note: "" }],
 };
 
@@ -24,7 +49,10 @@ test("attendance counts only sessions since joining", () => {
 });
 
 test("lapsed: active members who missed the last three", () => {
-  assert.deepEqual(lapsed(club).map((m) => m.id), ["b"]);
+  assert.deepEqual(
+    lapsed(club).map((m) => m.id),
+    ["b"]
+  );
 });
 
 test("toggleAttendee and parseAmount", () => {

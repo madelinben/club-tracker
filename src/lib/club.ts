@@ -50,8 +50,12 @@ export function newClub(name: string, fee: number, currency = "GBP"): Club {
 
 /** Paid minus fees for sessions attended: negative means they owe */
 export function balance(club: Club, memberId: string): number {
-  const paid = club.payments.filter((p) => p.memberId === memberId).reduce((n, p) => n + p.amount, 0);
-  const due = club.sessions.filter((s) => s.attendees.includes(memberId)).reduce((n, s) => n + s.fee, 0);
+  const paid = club.payments
+    .filter((p) => p.memberId === memberId)
+    .reduce((n, p) => n + p.amount, 0);
+  const due = club.sessions
+    .filter((s) => s.attendees.includes(memberId))
+    .reduce((n, s) => n + s.fee, 0);
   return paid - due;
 }
 
@@ -66,13 +70,20 @@ export function attendance(club: Club, member: Member): number | null {
 export function lapsed(club: Club, n = 3): Member[] {
   const recent = [...club.sessions].sort((a, b) => b.date.localeCompare(a.date)).slice(0, n);
   if (recent.length < n) return [];
-  return club.members.filter((m) => m.active && m.joined <= (recent[n - 1]?.date ?? "") && recent.every((s) => !s.attendees.includes(m.id)));
+  return club.members.filter(
+    (m) =>
+      m.active &&
+      m.joined <= (recent[n - 1]?.date ?? "") &&
+      recent.every((s) => !s.attendees.includes(m.id))
+  );
 }
 
 export function toggleAttendee(session: Session, memberId: string): Session {
   return {
     ...session,
-    attendees: session.attendees.includes(memberId) ? session.attendees.filter((id) => id !== memberId) : [...session.attendees, memberId],
+    attendees: session.attendees.includes(memberId)
+      ? session.attendees.filter((id) => id !== memberId)
+      : [...session.attendees, memberId],
   };
 }
 
@@ -90,5 +101,7 @@ export function formatMoney(pence: number, currency: string): string {
 export function parseClub(raw: unknown): ClubData | null {
   if (typeof raw !== "object" || raw === null) return null;
   const d = raw as Partial<ClubData>;
-  return d.version === 1 && Array.isArray(d.clubs) ? { version: 1, clubs: d.clubs, activeClubId: d.activeClubId ?? null } : null;
+  return d.version === 1 && Array.isArray(d.clubs)
+    ? { version: 1, clubs: d.clubs, activeClubId: d.activeClubId ?? null }
+    : null;
 }

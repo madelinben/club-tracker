@@ -41,7 +41,8 @@ export function ClubApp({ beforeExport }: { beforeExport?: BeforeExport }) {
     scroller.current?.scrollTo({ top: 0 });
   };
   const club = data.clubs.find((c) => c.id === data.activeClubId);
-  const setClub = (c: Club) => update({ ...data, clubs: data.clubs.map((x) => (x.id === c.id ? c : x)) });
+  const setClub = (c: Club) =>
+    update({ ...data, clubs: data.clubs.map((x) => (x.id === c.id ? c : x)) });
 
   if (!ready) return <div className="h-full animate-pulse bg-slate-100" />;
 
@@ -49,7 +50,11 @@ export function ClubApp({ beforeExport }: { beforeExport?: BeforeExport }) {
     <div className="flex h-full flex-col bg-slate-50 text-slate-900">
       <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
         <div className="mx-auto flex max-w-2xl flex-col gap-5 p-4">
-          {club && tab !== "clubs" && <p className="text-sm font-semibold uppercase tracking-wide text-indigo-800">{club.name}</p>}
+          {club && tab !== "clubs" && (
+            <p className="text-sm font-semibold uppercase tracking-wide text-indigo-800">
+              {club.name}
+            </p>
+          )}
           {tab === "clubs" && (
             <>
               <Clubs
@@ -60,16 +65,29 @@ export function ClubApp({ beforeExport }: { beforeExport?: BeforeExport }) {
                   go("register");
                 }}
               />
-              <DataBackup filename="club-tracker.json" data={data} parse={parseClub} onRestore={update} beforeExport={beforeExport} />
+              <DataBackup
+                filename="club-tracker.json"
+                data={data}
+                parse={parseClub}
+                onRestore={update}
+                beforeExport={beforeExport}
+              />
             </>
           )}
-          {tab !== "clubs" && !club && <p className="rounded-2xl bg-white p-8 text-center text-slate-600 ring-1 ring-slate-200">Start a club in the Clubs tab first.</p>}
+          {tab !== "clubs" && !club && (
+            <p className="rounded-2xl bg-white p-8 text-center text-slate-600 ring-1 ring-slate-200">
+              Start a club in the Clubs tab first.
+            </p>
+          )}
           {tab === "register" && club && <Register key={club.id} club={club} onChange={setClub} />}
           {tab === "members" && club && <Members club={club} onChange={setClub} />}
           {tab === "money" && club && <Money club={club} />}
         </div>
       </div>
-      <nav aria-label="Club Tracker" className="grid grid-cols-4 gap-1 border-t border-slate-200 bg-white p-1.5">
+      <nav
+        aria-label="Club Tracker"
+        className="grid grid-cols-4 gap-1 border-t border-slate-200 bg-white p-1.5"
+      >
         {TABS.map(({ id, label, Icon }) => (
           <button
             key={id}

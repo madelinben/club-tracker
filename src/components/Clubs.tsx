@@ -3,7 +3,15 @@ import { useState } from "react";
 import { type ClubData, newClub, parseAmount } from "../lib/club";
 import { card, field, primary } from "./ui";
 
-export function Clubs({ data, onChange, onOpen }: { data: ClubData; onChange: (d: ClubData) => void; onOpen: (id: string) => void }) {
+export function Clubs({
+  data,
+  onChange,
+  onOpen,
+}: {
+  data: ClubData;
+  onChange: (d: ClubData) => void;
+  onOpen: (id: string) => void;
+}) {
   const [name, setName] = useState("");
   const [fee, setFee] = useState("0");
 
@@ -25,11 +33,22 @@ export function Clubs({ data, onChange, onOpen }: { data: ClubData; onChange: (d
       >
         <label className="flex flex-col gap-1 text-sm font-semibold">
           Club, class or group
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Tuesday run club, U9s football, choir" className={field} required />
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Tuesday run club, U9s football, choir"
+            className={field}
+            required
+          />
         </label>
         <label className="flex flex-col gap-1 text-sm font-semibold">
           Session fee
-          <input value={fee} onChange={(e) => setFee(e.target.value)} inputMode="decimal" className={`${field} tabular-nums`} />
+          <input
+            value={fee}
+            onChange={(e) => setFee(e.target.value)}
+            inputMode="decimal"
+            className={`${field} tabular-nums`}
+          />
         </label>
         <button type="submit" className={primary}>
           <Plus size={16} aria-hidden="true" /> Start
@@ -53,7 +72,11 @@ export function Clubs({ data, onChange, onOpen }: { data: ClubData; onChange: (d
               type="button"
               onClick={() => {
                 if (confirm(`Delete ${c.name} and its registers?`))
-                  onChange({ ...data, clubs: data.clubs.filter((x) => x.id !== c.id), activeClubId: data.activeClubId === c.id ? null : data.activeClubId });
+                  onChange({
+                    ...data,
+                    clubs: data.clubs.filter((x) => x.id !== c.id),
+                    activeClubId: data.activeClubId === c.id ? null : data.activeClubId,
+                  });
               }}
               aria-label={`Delete ${c.name}`}
               className="grid size-11 place-items-center rounded-xl text-rose-700 hover:bg-rose-50 focus-visible:outline-2 focus-visible:outline-rose-700"
